@@ -1,13 +1,14 @@
 from contextlib import contextmanager
 import mysql.connector
 
+
 @contextmanager
 def get_db_cursor(commit=False):
     connection = mysql.connector.connect(
-        host = "localhost",
-        user = "root",
-        password = "Root@123",
-        database = "expense_manager"
+        host="localhost",
+        user="root",
+        password="Root@123",
+        database="expense_manager"
     )
     
     if connection.is_connected():
@@ -19,13 +20,27 @@ def get_db_cursor(commit=False):
     
     yield cursor
     
-        
     if commit:
         cursor.commit()
     
     cursor.close()
     connection.close()
 
-if __name__ == "__main__":
+
+# Create functions
+
+# Read functions
+def fetch_expenses(date):
     with get_db_cursor() as cursor:
-        print("Hello world")
+        query = "SELECT * FROM expenses WHERE expense_date=%s"
+        cursor.execute(query, (date,))
+        expenses = cursor.fetchall()
+        return expenses
+
+# Update functions
+
+# Delete functions
+
+
+if __name__ == "__main__":
+    print(fetch_expenses("2024-08-01"))
