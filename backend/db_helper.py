@@ -1,5 +1,7 @@
 from contextlib import contextmanager
 import mysql.connector
+from pydantic import BaseModel
+import datetime
 
 
 @contextmanager
@@ -21,13 +23,22 @@ def get_db_cursor(commit=False):
     yield cursor
     
     if commit:
-        cursor.commit()
+        connection.commit()
     
     cursor.close()
     connection.close()
 
 
 # Create functions
+class Expense(BaseModel):
+    amount: float
+    category: str
+    notes: str
+
+def create_expense(date, amount, category, notes):
+    with get_db_cursor(commit=True) as cursor:
+        query = "INSERT INTO expenses (expense_date, amount, category, notes) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (date, amount, category, notes))
 
 # Read functions
 def fetch_expenses(date):
@@ -43,4 +54,5 @@ def fetch_expenses(date):
 
 
 if __name__ == "__main__":
-    print(fetch_expenses("2024-08-01"))
+    create_expense(date="2025-01-01", amount=50, category="Food", notes="BurgerKing")
+    print(fetch_expenses("2025-01-01"))
