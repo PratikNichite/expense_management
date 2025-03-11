@@ -16,5 +16,5 @@ with tab1:
 with tab2:
     update_expenses_ui(API_URL, categories)
 
-with tab2:
+with tab3:
     analytics_ui()
