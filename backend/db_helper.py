@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 import mysql.connector
 from pydantic import BaseModel
-import datetime
 
 
 @contextmanager

@@ -1,5 +1,5 @@
-import pytest
 from backend import db_helper
+
 def test_database_connection():
     with db_helper.get_db_cursor() as cursor:
         assert cursor is not None
