@@ -1,8 +1,12 @@
 from contextlib import contextmanager
 import mysql.connector
 from pydantic import BaseModel
+from logging_setup import setup_logger
 
+# logging setup
+logger = setup_logger("db_logger", "server.log")
 
+# database connection
 @contextmanager
 def get_db_cursor(commit=False):
     connection = mysql.connector.connect(
@@ -35,12 +39,14 @@ class Expense(BaseModel):
     notes: str
 
 def create_expense(date, amount, category, notes):
+    logger.info(f"create_expense called with {date}, {amount}, {category}, {notes}")
     with get_db_cursor(commit=True) as cursor:
         query = "INSERT INTO expenses (expense_date, amount, category, notes) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (date, amount, category, notes))
 
 # Read functions
 def fetch_expenses(date):
+    logger.info(f"fetch_expenses called with {date}")
     with get_db_cursor() as cursor:
         query = "SELECT * FROM expenses WHERE expense_date=%s"
         cursor.execute(query, (date,))
@@ -53,5 +59,5 @@ def fetch_expenses(date):
 
 
 if __name__ == "__main__":
-    create_expense(date="2025-01-01", amount=50, category="Food", notes="BurgerKing")
+    create_expense(date="2025-04-01", amount=50, category="Food", notes="BurgerKing")
     print(fetch_expenses("2025-01-01"))
