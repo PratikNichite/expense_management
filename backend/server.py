@@ -1,5 +1,5 @@
 # dependencies
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from datetime import date
 import db_helper
 from typing import List
@@ -19,3 +19,15 @@ class Expense(BaseModel):
 def get_expenses(expense_date: date):
     expenses = db_helper.fetch_expenses(expense_date)
     return expenses
+
+# post routes
+@app.post("/expenses/{expense_date}")
+async def post_expense(expense_date: date, expense: Expense):
+    db_helper.create_expense(
+        expense_date, 
+        expense.amount,
+        expense.category,
+        expense.notes
+    )
+    
+    return {"message": "Expense updated successfully!"}
