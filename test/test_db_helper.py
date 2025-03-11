@@ -12,9 +12,6 @@ def test_db_connection():
 
 def test_fetch_expenses():
     try:
-        with db_helper.get_db_cursor() as cursor:
-            query = "SELECT * FROM expenses WHERE expense_date=%s"
-            cursor.execute(query, ("2024-08-01",))
-            assert len(cursor.fetchall()) >= 1
+        assert len(db_helper.fetch_expenses("2024-08-01")) >= 1
     except Exception as e:
         pytest.fail(f"Fetch error: {e}")
