@@ -1,8 +1,8 @@
 # dependencies
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from datetime import date
 import db_helper
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 # api
@@ -10,9 +10,10 @@ app = FastAPI()
 
 # response model
 class Expense(BaseModel):
+    id: Optional[int] = None
     amount: float
     category: str
-    notes: str
+    notes: Optional[str] = None
 
 # get routes
 @app.get("/expenses/{expense_date}", response_model=List[Expense])
@@ -22,7 +23,7 @@ def get_expenses(expense_date: date):
 
 # post routes
 @app.post("/expenses/{expense_date}")
-async def post_expense(expense_date: date, expense: Expense):
+def add_expense(expense_date: date, expense: Expense):
     db_helper.create_expense(
         expense_date, 
         expense.amount,
@@ -30,4 +31,17 @@ async def post_expense(expense_date: date, expense: Expense):
         expense.notes
     )
     
-    return {"message": "Expense updated successfully!"}
+    return {"message": "Expense added successfully!"}
+
+@app.patch("/expenses/{expense_date}")
+def update_expenses(expense_date: date, expenses: List[Expense]):
+    for expense in expenses:
+        db_helper.update_expenses(
+            expense_date,
+            expense.id,
+            expense.amount,
+            expense.category,
+            expense.notes
+        )
+        
+    return {"message": "Expenses updated successfully!"}

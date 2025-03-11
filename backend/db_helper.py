@@ -54,6 +54,17 @@ def fetch_expenses(date):
         return expenses
 
 # Update functions
+def update_expenses(date, id, amount, category, notes):
+    logger.info(f"update_expenses called with {date}, {id}")
+    with get_db_cursor(commit=True) as cursor:
+        query = '''UPDATE expenses
+                    SET 
+                    amount = %s, 
+                    category = %s, 
+                    notes = %s
+                    WHERE id = %s And expense_date = %s
+                    '''
+        cursor.execute(query, (amount, category, notes, id, date))
 
 # Delete functions
 
