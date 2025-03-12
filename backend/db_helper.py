@@ -57,9 +57,12 @@ def fetch_category_summary(start_date, end_date):
     logger.info(f"fetch_category_summary called with {start_date}, {end_date}")
     with get_db_cursor() as cursor:
         query = '''
-            SELECT * FROM expenses
+            SELECT category, SUM(amount) AS total 
+            FROM expenses
             WHERE expense_date
             BETWEEN %s and %s
+            GROUP BY category
+            ORDER BY total DESC
         '''
         
         cursor.execute(query, (start_date, end_date))
@@ -85,4 +88,4 @@ def update_expenses(date, id, amount, category, notes):
 if __name__ == "__main__":
     # create_expense(date="2025-04-01", amount=50, category="Food", notes="BurgerKing")
     # print(fetch_expenses("2025-01-01"))
-    fetch_category_summary("2024-08-01", "2024-08-03")
+    print(fetch_category_summary("2024-08-01", "2024-08-03"))

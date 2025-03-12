@@ -4,6 +4,7 @@ from datetime import date
 import db_helper
 from typing import List, Optional
 from pydantic import BaseModel
+import pandas as pd
 
 # api
 app = FastAPI()
@@ -14,6 +15,12 @@ class Expense(BaseModel):
     amount: float
     category: str
     notes: Optional[str] = None
+
+# request model
+class DateRange(BaseModel):
+    start_date: date
+    end_date: date
+
 
 # get routes
 @app.get("/expenses/{expense_date}", response_model=List[Expense])
@@ -33,6 +40,20 @@ def add_expense(expense_date: date, expense: Expense):
     
     return {"message": "Expense added successfully!"}
 
+@app.post("/expenses/category/")
+def get_category_summary(date_range: DateRange):
+    expenses = db_helper.fetch_category_summary(date_range.start_date, date_range.end_date)
+    
+    expense_summary = {
+        "category": [item["category"] for item in expenses],
+        "total": [item["total"] for item in expenses]
+    }
+    
+    df_expense_summary = pd.DataFrame(expense_summary)
+    df_expense_summary["percentage"] = (df_expense_summary["total"] / df_expense_summary["total"].sum()) * 100
+    return df_expense_summary
+
+# patch routes
 @app.patch("/expenses/{expense_date}")
 def update_expenses(expense_date: date, expenses: List[Expense]):
     for expense in expenses:
