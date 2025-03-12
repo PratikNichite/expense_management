@@ -18,7 +18,7 @@ with tab2:
     update_expenses_ui(API_URL, categories)
 
 with tab3:
-    analytics_category_ui()
+    analytics_category_ui(API_URL)
 
 with tab4:
     analytics_month_ui()
