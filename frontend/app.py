@@ -2,6 +2,7 @@ import streamlit as st
 from add_epense_tab import add_expense_ui
 from update_expenses_tab import update_expenses_ui
 from analytics_tab import analytics_ui
+from analytics_month_tab import analytics_month_ui
 
 API_URL = "http://localhost:8000"
 
