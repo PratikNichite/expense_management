@@ -69,6 +69,20 @@ def fetch_category_summary(start_date, end_date):
         expenses = cursor.fetchall()
         return expenses
 
+def fetch_month_summary():
+    with get_db_cursor() as cursor:
+        query = '''
+            SELECT 
+            DATE_FORMAT(expense_date, '%Y-%m') AS month,
+            SUM(amount) AS total
+            FROM expenses
+            GROUP BY month
+            ORDER BY month
+        '''
+        cursor.execute(query)
+        expenses = cursor.fetchall()
+        return expenses
+
 # Update functions
 def update_expenses(date, id, amount, category, notes):
     logger.info(f"update_expenses called with {date}, {id}")
@@ -88,4 +102,4 @@ def update_expenses(date, id, amount, category, notes):
 if __name__ == "__main__":
     # create_expense(date="2025-04-01", amount=50, category="Food", notes="BurgerKing")
     # print(fetch_expenses("2025-01-01"))
-    print(fetch_category_summary("2024-08-01", "2024-08-03"))
+    print(fetch_month_summary())

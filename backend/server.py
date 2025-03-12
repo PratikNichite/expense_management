@@ -28,6 +28,11 @@ def get_expenses(expense_date: date):
     expenses = db_helper.fetch_expenses(expense_date)
     return expenses
 
+@app.get("/expenses/month-wise")
+def get_category_summary(expense_date: date):
+    expenses = db_helper.fetch_month_summary()
+    return expenses
+
 # post routes
 @app.post("/expenses/{expense_date}")
 def add_expense(expense_date: date, expense: Expense):
