@@ -7,7 +7,7 @@ API_URL = "http://localhost:8000"
 
 st.title("Expense Tracking System")
 
-tab1, tab2, tab3 = st.tabs(["Add Expense", "Update Expenses", "Analytics"])
+tab1, tab2, tab3, tab4 = st.tabs(["Add Expense", "Update Expenses", "Analytics (Category)", "Analytics (Month)"])
 categories = ["Rent", "Food", "Shopping", "Entertainment", "Other"]
 
 with tab1:
@@ -18,3 +18,6 @@ with tab2:
 
 with tab3:
     analytics_ui()
+
+with tab4:
+    analytics_month_ui()
