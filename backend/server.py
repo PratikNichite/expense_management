@@ -28,8 +28,8 @@ def get_expenses(expense_date: date):
     expenses = db_helper.fetch_expenses(expense_date)
     return expenses
 
-@app.get("/expenses/month-wise")
-def get_category_summary(expense_date: date):
+@app.get("/month/expenses")
+def get_category_summary():
     expenses = db_helper.fetch_month_summary()
     return expenses
 
@@ -45,7 +45,7 @@ def add_expense(expense_date: date, expense: Expense):
     
     return {"message": "Expense added successfully!"}
 
-@app.post("/expenses/category/")
+@app.post("/category/expenses/")
 def get_category_summary(date_range: DateRange):
     expenses = db_helper.fetch_category_summary(date_range.start_date, date_range.end_date)
     

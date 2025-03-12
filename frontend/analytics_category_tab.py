@@ -22,7 +22,7 @@ def analytics_category_ui(API_URL):
                 "end_date":end_date.isoformat()
             }
             
-            response = requests.post(f"{API_URL}/expenses/category/", json=user_inputs)
+            response = requests.post(f"{API_URL}/category/expenses/", json=user_inputs)
             
             if response.status_code == 200:    
                 data = response.json()

@@ -21,4 +21,4 @@ with tab3:
     analytics_category_ui(API_URL)
 
 with tab4:
-    analytics_month_ui()
+    analytics_month_ui(API_URL)
