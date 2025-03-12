@@ -6,9 +6,25 @@ from analytics_month_tab import analytics_month_ui
 
 API_URL = "http://localhost:8000"
 
-st.title("Expense Tracking System")
+# Apply CSS styling for the title
+st.markdown(
+    """
+    <style>
+    .title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #2F4F4F; /* Dark Slate Gray */
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-tab1, tab2, tab3, tab4 = st.tabs(["Add Expense", "Update Expenses", "Analytics (Category)", "Analytics (Month)"])
+st.markdown("<p class='title'>💰 Expense Tracking System 📊</p>", unsafe_allow_html=True)
+
+tab1, tab2, tab3, tab4 = st.tabs(["➕ Add Expense", "🔄 Update Expenses", "📈 Analytics (Category)", "🗓️ Analytics (Month)"])
+
 categories = ["Rent", "Food", "Shopping", "Entertainment", "Other"]
 
 with tab1:
