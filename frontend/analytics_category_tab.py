@@ -1,7 +1,8 @@
 import streamlit as st
-from datetime import datetime, date
+from datetime import date
 import pandas as pd
 import requests
+import plotly.express as px
 
 def analytics_category_ui(API_URL):
     col1, col2 = st.columns(2)
@@ -35,10 +36,26 @@ def analytics_category_ui(API_URL):
                 "percentage": []
             })
 
-        st.bar_chart(
-            data=df[["category", "percentage"]].set_index("category"),
-            x_label="Expense Category",
-            y_label="Total Expenses (%)",
+        # Pie Chart
+        fig_pie = px.pie(
+            df,
+            values="percentage",
+            names="category",
+            title="Expense Distribution by Category",
         )
+        st.plotly_chart(fig_pie)
+
+        # Bar Chart
+
+        fig_bar = px.bar(
+            df,
+            x="percentage",
+            y="category",
+            orientation='h',
+            title="Expenses by Category",
+            labels={"percentage": "Total Expenses (%)", "category": "Expense Category"}
+        )
+
+        st.plotly_chart(fig_bar)
 
         st.table(df.style.format({"total": "{:.2f}", "percentage": "{:.2f}"}))
