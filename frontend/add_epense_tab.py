@@ -6,7 +6,7 @@ def add_expense_ui(API_URL, categories):
     selected_date = st.date_input("📅 Date", datetime.now(), key="add-expense")
 
     with st.form(key="add-expense-form"):
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)  # Reduce to 2 columns
 
         with col1:
             st.subheader("💰 Amount")
@@ -18,6 +18,15 @@ def add_expense_ui(API_URL, categories):
                 key="amount",
                 label_visibility="collapsed"
             )
+
+            st.subheader("📝 Notes")  # Move Notes to the same column
+            notes_input = st.text_input(
+                label="Note",
+                value="",
+                key="notes",
+                label_visibility="collapsed"
+            )
+
         with col2:
             st.subheader("🗂️ Category")
             category_input = st.selectbox(
@@ -26,14 +35,6 @@ def add_expense_ui(API_URL, categories):
                 key="category",
                 label_visibility="collapsed",
             )
-        with col3:
-            st.subheader("📝 Notes")
-            notes_input = st.text_input(
-                label="Note",
-                value="",
-                key="notes",
-                label_visibility="collapsed"
-            )
 
         expense = {
             "amount": amount_input,
@@ -41,12 +42,13 @@ def add_expense_ui(API_URL, categories):
             "notes": notes_input
         }
 
-        submit_button = st.form_submit_button("Submit")
+        submit_button = st.form_submit_button("Add Expense")
 
         if submit_button:
-            response = requests.post(f"{API_URL}/expenses/{selected_date}", json=expense)
-
-            if response.status_code == 200:
+            try:
+                response = requests.post(f"{API_URL}/expenses/{selected_date}", json=expense)
+                response.raise_for_status()
                 st.success("✅ Expense added Successfully!")
-            else:
-                st.error("❌ Failed to add expense!")
+            except requests.exceptions.RequestException as e:
+                st.error(f"❌ Failed to add expense: {e}")
+
