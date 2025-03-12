@@ -12,9 +12,6 @@ def analytics_month_ui(API_URL):
     if response.status_code == 200:    
         data = response.json()
         df = pd.DataFrame(data)
-        df['date'] = pd.to_datetime(df['date'], format='%Y-%m')
-        df['year'] = df['date'].dt.year
-        df['month'] = df['date'].dt.strftime('%B')  # Converts "08" -> "August"
     else:
         st.error("Could not fetch analytics!")
         df = pd.DataFrame({
@@ -30,5 +27,8 @@ def analytics_month_ui(API_URL):
         y_label="Expenses (INR)",
     )
     
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m')
+    df['year'] = df['date'].dt.year
+    df['month'] = df['date'].dt.strftime('%B')
     
     st.table(df[["month", "year", "total"]].style.format({"total": "{:.2f}"}))
