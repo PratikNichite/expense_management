@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 
 def analytics_category_ui():
-    with st.form(key="date-selection-form"):
+    with st.form(key="category-date-selection-form"):
         col1, col2 = st.columns(2)
         
         with col1:

@@ -53,6 +53,19 @@ def fetch_expenses(date):
         expenses = cursor.fetchall()
         return expenses
 
+def fetch_category_summary(start_date, end_date):
+    logger.info(f"fetch_category_summary called with {start_date}, {end_date}")
+    with get_db_cursor() as cursor:
+        query = '''
+            SELECT * FROM expenses
+            WHERE expense_date
+            BETWEEN %s and %s
+        '''
+        
+        cursor.execute(query, (start_date, end_date))
+        expenses = cursor.fetchall()
+        return expenses
+
 # Update functions
 def update_expenses(date, id, amount, category, notes):
     logger.info(f"update_expenses called with {date}, {id}")
@@ -70,5 +83,6 @@ def update_expenses(date, id, amount, category, notes):
 
 
 if __name__ == "__main__":
-    create_expense(date="2025-04-01", amount=50, category="Food", notes="BurgerKing")
-    print(fetch_expenses("2025-01-01"))
+    # create_expense(date="2025-04-01", amount=50, category="Food", notes="BurgerKing")
+    # print(fetch_expenses("2025-01-01"))
+    fetch_category_summary("2024-08-01", "2024-08-03")
