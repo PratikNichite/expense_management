@@ -72,12 +72,12 @@ def fetch_category_summary(start_date, end_date):
 def fetch_month_summary():
     with get_db_cursor() as cursor:
         query = '''
-            SELECT 
-            DATE_FORMAT(expense_date, '%Y-%m') AS month,
-            SUM(amount) AS total
-            FROM expenses
-            GROUP BY month
-            ORDER BY month
+        SELECT 
+        DATE_FORMAT(expense_date, '%Y-%m') AS date,
+        SUM(amount) AS total
+        FROM expenses
+        GROUP BY date
+        ORDER BY date
         '''
         cursor.execute(query)
         expenses = cursor.fetchall()
